@@ -1,30 +1,37 @@
-#include <stdio.h>
 #include <iostream>
 #include <stdio.h>
-#include <SQLAPI.h>
+#include <libpq-fe.h>
+// #include <stdio.h>
+// #include <SQLAPI.h>
 
-int main(int, char**){
+int main(int argc, char* argv[]){
     printf("Hello, from login_registerkd!\n");
-    SAConnection con;
-
-    printf("We are connected 3!\n");
-        try {
-        con.Connect(_TSA("austinperrine"), _TSA("austinperrine"), _TSA("my_password"), SA_PostgreSQL_Client);
-        printf("We are connected!\n");
-
-        /*
-        The rest of the tutorial goes here!
-        */
-        
-        con.Disconnect();
-        printf("We are disconnected!\n");
-    }
-    catch(SAException &x) {
-        printf("%s\n", x.ErrText().GetMultiByteChars());
-        con.Rollback();
-        printf("%s\n", x.ErrText().GetMultiByteChars());
-    }
-    
  printf("We are outs!!!!\n");
+ char *conninfo = "dbname=austinperrine user=austinperrine password=your_password host=localhost port=5432";
+
+
+    // Create a connection
+    PGconn *conn = PQconnectdb(conninfo);
+
+    // Check if the connection is successful
+    if (PQstatus(conn) != CONNECTION_OK) {
+        // If not successful, print the error message and finish the connection
+        printf("Error while connecting to the database server: %s\n", PQerrorMessage(conn));
+
+        // Finish the connection
+        PQfinish(conn);
+
+        // Exit the program
+        exit(1);
+    }
+
+    // We have successfully established a connection to the database server
+    printf("Connection Established\n");
+    printf("Port: %s\n", PQport(conn));
+    printf("Host: %s\n", PQhost(conn));
+    printf("DBName: %s\n", PQdb(conn));
+
+    // Close the connection and free the memory
+    PQfinish(conn);
     return 0;
 }

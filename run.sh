@@ -1,1 +1,1 @@
-cd ./build ; login_register
+cd ./build ; ./LoginRegister hello world
