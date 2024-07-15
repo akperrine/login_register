@@ -1,27 +1,16 @@
 #include <iostream>
 #include <stdio.h>
 #include <libpq-fe.h>
-// #include <stdio.h>
-// #include <SQLAPI.h>
 
 int main(int argc, char* argv[]){
     printf("Hello, from login_registerkd!\n");
- printf("We are outs!!!!\n");
- char *conninfo = "dbname=austinperrine user=austinperrine password=your_password host=localhost port=5432";
+    char *conninfo = "dbname=austinperrine user=austinperrine password=your_password host=localhost port=5432";
 
-
-    // Create a connection
     PGconn *conn = PQconnectdb(conninfo);
 
-    // Check if the connection is successful
     if (PQstatus(conn) != CONNECTION_OK) {
-        // If not successful, print the error message and finish the connection
-        printf("Error while connecting to the database server: %s\n", PQerrorMessage(conn));
-
-        // Finish the connection
+        printf("Error connecting to database: %s\n", PQerrorMessage(conn));
         PQfinish(conn);
-
-        // Exit the program
         exit(1);
     }
 
@@ -33,5 +22,6 @@ int main(int argc, char* argv[]){
 
     // Close the connection and free the memory
     PQfinish(conn);
+    printf("We are outs!!!!\n");
     return 0;
 }
