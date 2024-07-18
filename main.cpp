@@ -4,6 +4,22 @@
 #include <string>
 using std::string;
 
+void insertUser(PGconn *conn) {
+     string username;
+    std::cout << "Enter your username: ";
+    std::cin >> username;
+
+    string password;
+    std::cout << "Enter your password: ";
+    std::cin >> password;
+    string insertCmd = "INSERT INTO users (username, password) VALUES('"+ username + "', '" + password + "');";
+    PGresult *res = PQexec(conn, insertCmd.c_str());
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        std::cout << "Insert into user table failed: " << PQresultErrorMessage(res) << '\n';
+        exit(1);
+    }
+}
+
 int main(int argc, char* argv[]){
     printf("Hello, from login_registerkd!\n");
     char *conninfo = "dbname=university user=austinperrine password=your_password host=localhost port=5432";
@@ -28,15 +44,13 @@ int main(int argc, char* argv[]){
     bool home = true;
     while (on) {
         int choice;
-        if (home) {
         std::cout << "Welcome to University Registry UI: How can we help?:\nLogin: press 1 \nRegister: press 2\nUpdate: press 3\nDelete: press 4\nLog Off: press 5\n";
         std::cin >> choice;
-        }
 
         switch(choice) {
         case 1: 
             printf("option 1: Login");
-            home = false;
+            insertUser(conn);
             break;
         case 2: 
             printf("option 2: Register");
@@ -53,25 +67,9 @@ int main(int argc, char* argv[]){
             break;
         }
     }
-
-    string username;
-    std::cout << "Enter your username";
-    std::cin >> username;
-
-    string password;
-    std::cout << "Enter your password";
-    std::cin >> password;
-    string insertCmd = "INSERT INTO users (username, password) VALUES('"+ username + "', '" + password + "');";
-    PGresult *res = PQexec(conn, insertCmd.c_str());
-    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
-        std::cout << "Insert into user table failed: " << PQresultErrorMessage(res) << '\n';
-        exit(1);
-    }
-
-
-
     // Close the connection and free the memory
     PQfinish(conn);
     printf("We are outs!!!!\n");
     return 0;
 }
+
