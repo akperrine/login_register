@@ -24,6 +24,36 @@ int main(int argc, char* argv[]){
     printf("Host: %s\n", PQhost(conn));
     printf("DBName: %s\n", PQdb(conn));
 
+    bool on = true;
+    bool home = true;
+    while (on) {
+        int choice;
+        if (home) {
+        std::cout << "Welcome to University Registry UI: How can we help?:\nLogin: press 1 \nRegister: press 2\nUpdate: press 3\nDelete: press 4\nLog Off: press 5\n";
+        std::cin >> choice;
+        }
+
+        switch(choice) {
+        case 1: 
+            printf("option 1: Login");
+            home = false;
+            break;
+        case 2: 
+            printf("option 2: Register");
+            break;
+        case 3: 
+            printf("option 3: Update");
+            break;
+        case 4: 
+            printf("option 4: Delete");
+            break;
+        case 5:
+            printf("option 5: Log off... bye bye");
+            on = false;
+            break;
+        }
+    }
+
     string username;
     std::cout << "Enter your username";
     std::cin >> username;
