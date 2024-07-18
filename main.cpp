@@ -24,15 +24,15 @@ int main(int argc, char* argv[]){
     printf("Host: %s\n", PQhost(conn));
     printf("DBName: %s\n", PQdb(conn));
 
-    // string username;
-    // std::cout << "Enter your username";
-    // std::cin >> username;
+    string username;
+    std::cout << "Enter your username";
+    std::cin >> username;
 
-    // string password;
-    // std::cout << "Enter your password";
-    // std::cin >> password;
-
-    PGresult *res = PQexec(conn, "INSERT INTO users (username, password) VALUES('Mike', 'password');");
+    string password;
+    std::cout << "Enter your password";
+    std::cin >> password;
+    string insertCmd = "INSERT INTO users (username, password) VALUES('"+ username + "', '" + password + "');";
+    PGresult *res = PQexec(conn, insertCmd.c_str());
     if (PQresultStatus(res) != PGRES_COMMAND_OK) {
         std::cout << "Insert into user table failed: " << PQresultErrorMessage(res) << '\n';
         exit(1);
