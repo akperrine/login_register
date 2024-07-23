@@ -51,17 +51,37 @@ void getUser(PGconn *conn) {
         exit(1);
     } else {
         printf("works\n");
+        int passwordField;
         for (int i = 0; i < PQnfields(res); i++) {
             std::cout << PQfname(res, i) << '\n';
-        }
-        for (int i = 0; i < PQntuples(res); i++) {
-            for (int j = 0; j < PQnfields(res); j++) {
-                std::cout << PQgetvalue(res, i, j) << "   ";
+
+            if (string(PQfname(res, i)) == "password") {
+                passwordField = i;
+                printf("passoword found");
             }
-      std::cout << std::endl;
-    }
+        }
+        if (string(PQgetvalue(res, 0, passwordField)) != credentials.password){
+            std::cout << "Wrong password. Please try again \n\n\n";
+        } else {
+            for (int i = 0; i < PQntuples(res); i++) {
+                        for (int j = 0; j < PQnfields(res); j++) {
+                            std::cout << PQgetvalue(res, i, j) << "   ";
+                            if (j == passwordField && string(PQgetvalue(res, i, j)) != credentials.password) {
+
+                                std::cout << " Password is incorrect ";
+
+                            }
+                        }
+                std::cout << std::endl;
+            }
+        }
+       
     }
 
+}
+
+void updateUser(PGconn *conn) {
+    Credentials updateCredentials = requestCredentials();
 }
 
 
