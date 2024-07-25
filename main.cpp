@@ -149,6 +149,30 @@ void updateUser(PGconn *conn) {
     }
 }
 
+void deleteUser(PGconn *conn) {
+    Credentials credentials = requestCredentials();
+    User *user = getUser(conn, credentials);
+    if (user == nullptr) {
+        printf("undeclared");
+    } else {
+        string userId = user->id;
+        printf(userId.c_str());
+        string deleteQuery = "DELETE FROM users WHERE id = '" + userId + "';\n";
+        std::cout << deleteQuery;
+        PGresult *res = PQexec(conn, deleteQuery.c_str()); 
+
+        ExecStatusType status = PQresultStatus(res);
+        printf("Execution status: %d\n", status);
+
+        if (PQresultStatus(res) == PGRES_COMMAND_OK) {
+            std::cout << "Username was succesfully updated\n";
+           
+        } else {
+             std::cout << "Retrieval of user from users failed: " << PQresultErrorMessage(res) << " end\n";
+            exit(1);
+        }
+    }
+}
 
 int main(int argc, char* argv[]){
     printf("Hello, from login_registerkd!\n");
@@ -197,6 +221,7 @@ int main(int argc, char* argv[]){
         }    
         case 4: 
             printf("option 4: Delete");
+            deleteUser(conn);
             break;
         case 5:
             printf("option 5: Log off... bye bye");
